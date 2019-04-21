@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>FitBit Device UI</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Add a gray background color and some padding to the footer */
+    footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    }
+
+    input{
+    margin-right: 30px;
+    margin-bottom: 50px;
+    word-wrap: normal;
+    }
+
+  </style>
+</head>
+<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCGNJ4pnRGIncvQtCzqHpv5WFLx6t2zHRo",
+    authDomain: "sammm-60f54.firebaseapp.com",
+    databaseURL: "https://sammm-60f54.firebaseio.com",
+    projectId: "sammm-60f54",
+    storageBucket: "sammm-60f54.appspot.com",
+    messagingSenderId: "922345584900"
+  };
+  firebase.initializeApp(config);
+
+</script>
+<script>
+     function sample()
+     {
+        var dbref = firebase.database().ref().child("FitBit/1");
+       dbref.on('value', function(snapshot) {
+          snapshot.forEach(function(child) {
+            if(child.key == "Status"){
+              document.getElementById("stat").value= child.val();
+
+            }else if(child.key == "Heart_rate"){
+              document.getElementById("heart").value= child.val();
+            } else if(child.key == "Sleep_hours") {
+              document.getElementById("sleep").value= child.val();
+            }
+            else if(child.key == "Steps_taken"){
+              document.getElementById("steps").value= child.val();
+            }else{
+              document.getElementById("temp").value= child.val();
+            }
+
+          });
+       });
+       var dbref_2 = firebase.database().ref().child("Smart_plate/1");
+       dbref_2.on('value', function(snapshot) {
+          snapshot.forEach(function(child) {
+            if(child.key == "Calories_taken"){
+              document.getElementById("cal").value= child.val();
+
+            }else if(child.key == "Carbs"){
+              document.getElementById("carbs").value= child.val();
+            } else if(child.key == "Fats") {
+              document.getElementById("fat").value= child.val();
+            }
+            else if(child.key == "Proteins"){
+              document.getElementById("protein").value= child.val();
+            }else{
+              document.getElementById("plate_stat").value= child.val();
+            }
+
+          });
+       });
+       var dbref_3 = firebase.database().ref().child("Body_weight/1");
+       dbref_3.on('value', function(snapshot) {
+          snapshot.forEach(function(child) {
+            if(child.key == "Body_weight"){
+              document.getElementById("weight").value= child.val();
+
+            }
+            else{
+              document.getElementById("weight_stat").value= child.val();
+            }
+
+          });
+       });
+     }
+
+</script>
+<body onload="sample();">
+
+<!-- <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Portfolio</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav> -->
+
+<div style="height: 90px; background-color: #FDB833;">
+  <div class="container text-center">
+    <h1 style="color: white;">FitBit Device UI</h1>
+  </div>
+</div>
+  
+<!-- <div class="container">     -->
+<!-- <div class="row"> -->
+  <div class="container text-center" style="width:100%">
+    <img src="https://images-na.ssl-images-amazon.com/images/I/81cp0NTn-EL._SX522_.jpg" style="width:470px" alt="Image">
+    <!-- <h3>FitBit</h3> <br> -->
+    <div style="text-align: center; word-wrap: break-word;">
+      <b>Status</b> <input type="text" id="stat" name="Status" value="On" size="10"> 
+      <b>Steps Taken</b> <input type="text" id ="steps" name="StepsTaken" value="300" size="10">
+      <b>Heart Rate (BPM)</b> <input type="text" id = "heart" name="HeartRate" value="57" size="10">
+      <b>Hours of Sleep</b> <input type="text" id ="sleep" name="HoursOfSleep" value="7.5" size="10">
+      <b>Body Temperature (F)</b> <input type="text" id = "temp" name="BodyTemp" value="100" size="10">
+    </div>
+  </div>
+    <!-- <div class="col-sm-4"> 
+        <img src="https://marketing.fitbit.com/images/product-listing/desktop/aria2-black-0-5bccb74f9e88d493dfc6141ec59f64fb.png" class="img-responsive" style="width:370px" alt="Image">
+      <div style="margin-left: -50px;">
+        <h3>Smart Scale</h3> <br>
+        Status <input type="text" id="weight_stat" name="Status" value="On"><br><br>
+        Body Weight <input type="text" id="weight" name="BodyWeight" value="200"><br><br>
+      </div>
+    </div>
+    <div class="col-sm-4"> 
+      <img src="http://i68.tinypic.com/2n15l0.gif" class="img-responsive" style="width:370px" alt="Image">
+      <div style="margin-left: -60px;">
+        <h3>Smart Plate</h3> <br>
+        Status <input type="text" id ="plate_stat" name="Status" value="On"><br><br>
+        Calories <input type="text" id ="cal" name="Calories" value="300"><br><br>
+        Protein (G) <input type="text" id="protein" name="Protein" value="57"><br><br>
+        Carbs (G) <input type="text" id="carbs" name="Carbs" value="7.5"><br><br>
+        Fat (G) <input type="text" id="fat" name="Fat" value="100"><br><br>
+     </div>
+  </div> -->
+<!-- </div><br> -->
+
+<!-- <div class="container-fluid bg-3 text-center">    
+  <div class="row">
+    <div class="col-sm-3">
+      <p>Some text..</p>
+      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-3"> 
+      <p>Some text..</p>
+      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-3"> 
+      <p>Some text..</p>
+      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-3">
+      <p>Some text..</p>
+      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+    </div>
+  </div>
+</div><br><br>
+
+<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer> -->
+
+</body>
+</html>
