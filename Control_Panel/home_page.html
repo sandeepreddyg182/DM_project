@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Home Page</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    body{
+      background-color:black;
+
+    }
+    
+
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    h1,h2,h3{
+      color:white !important;
+    }
+    
+    /* Add a gray background color and some padding to the footer */
+    /* footer {
+      background-color: #f2f2f2;
+      padding: 25px;
+    } */
+  </style>
+</head>
+<script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+<!-- <script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCGNJ4pnRGIncvQtCzqHpv5WFLx6t2zHRo",
+    authDomain: "sammm-60f54.firebaseapp.com",
+    databaseURL: "https://sammm-60f54.firebaseio.com",
+    projectId: "sammm-60f54",
+    storageBucket: "sammm-60f54.appspot.com",
+    messagingSenderId: "922345584900"
+  };
+  firebase.initializeApp(config);
+
+</script>
+<script>
+     function sample()
+     {
+	 
+      var x_axis = [];
+	   var y_axis = [];
+	   var y_axis_heart = [];
+	   var y_axis_steps = [];
+       var x_axis_bar = [];
+	   var y_axis_bar = [];
+	   var x_axis_plate = [];
+	   var y_axis_car = [];
+	   var y_axis_prot = [];
+	   var y_axis_fat = [];
+	    var dbref = firebase.database().ref().child("FitBit");
+		
+        dbref.orderByKey().limitToLast(1).on('child_added', function(snapshot) {
+        snapshot.forEach(function(child) {
+        if(child.key == "Status"){
+              document.getElementById("stat").value= child.val();
+
+            }else if(child.key == "Heart_rate"){
+              document.getElementById("heart").value= child.val();
+            } else if(child.key == "Sleep_hours") {
+              document.getElementById("sleep").value= child.val();
+            }
+            else if(child.key == "Steps_taken"){
+              document.getElementById("steps").value= child.val();
+            }else{
+              document.getElementById("temp").value= child.val();
+			  
+            }
+         });
+        });
+       var userRef = firebase.database().ref().child("FitBit");
+       userRef.on("value", function(snapshot) {
+       snapshot.forEach(function(child) {
+	   x_axis.push(Number(child.key));
+	   y_axis.push(parseInt(child.val().Temperature, 10));
+	   y_axis_heart.push(parseInt(child.val().Heart_rate, 10));
+	   y_axis_steps.push(parseInt(child.val().Steps_taken, 10));
+       });
+	   var trace1 = {
+                    x: x_axis,
+                    y: y_axis,
+                    type: 'scatter',
+					mode: 'lines',
+					name: 'Temp'
+                  };
+	    var trace2 = {
+                    x: x_axis,
+                    y: y_axis_heart,
+                    type: 'scatter',
+					mode: 'lines',
+					name: 'HRate'
+                  };
+		var trace3 = {
+                    x: x_axis,
+                    y: y_axis_steps,
+                    type: 'scatter',
+					mode: 'lines',
+					name: 'Steps'
+                  };
+	    var layout = {
+                 
+				  
+				 
+				  xaxis: {
+                         title: 'Time'
+                      }
+  
+
+               };
+	   var data = [trace1,trace2,trace3];
+	  Plotly.newPlot('tester', data,layout);
+      });
+	  
+	  
+      
+	  
+      
+
+
+       var dbref = firebase.database().ref().child("Smart_plate");
+       dbref.orderByKey().limitToLast(1).on('child_added', function(snapshot) {
+        snapshot.forEach(function(child) {
+        if(child.key == "Status"){
+              document.getElementById("plate_stat").value= child.val();
+
+            }else if(child.key == "Proteins"){
+              document.getElementById("protein").value= child.val();
+            } else if(child.key == "Carbs") {
+              document.getElementById("carbs").value= child.val();
+            }
+            else if(child.key == "Fats"){
+              document.getElementById("fat").value= child.val();
+            }else{
+              document.getElementById("cal").value= child.val();
+			  
+            }
+         });
+        });
+      var userRef = firebase.database().ref().child("Smart_plate");
+       userRef.on("value", function(snapshot) {
+       snapshot.forEach(function(child) {
+	   x_axis_plate.push(Number(child.key));
+	   y_axis_car.push(parseInt(child.val().Carbs, 10));
+	   y_axis_prot.push(parseInt(child.val().Proteins, 10));
+	   y_axis_fat.push(parseInt(child.val().Fats, 10));
+       });
+	   var trace1 = {
+                    x: x_axis_plate,
+                    y: y_axis_car,
+                    type: 'bar',
+					name: 'Carbs'
+                  };
+	    var trace2 = {
+                    x: x_axis_plate,
+                    y: y_axis_prot,
+                    type: 'bar',
+					name: 'Proteins'
+                  };
+		var trace3 = {
+                    x: x_axis_plate,
+                    y: y_axis_fat,
+                    type: 'bar',
+					name: 'Fats'
+                  };
+	   var layout = {
+                 
+				  
+				 
+				  xaxis: {
+                         title: 'Time'
+                      }
+  
+
+               };
+	   var data = [trace1,trace2,trace3];
+	  Plotly.newPlot('tester_2', data,layout);
+      });
+	  
+	  
+	   
+	   
+	   
+	   
+       var dbref_bw = firebase.database().ref().child("Body_weight");
+        dbref_bw.orderByKey().limitToLast(1).on('child_added', function(snapshot) {
+        snapshot.forEach(function(child) {
+        if(child.key == "Status"){
+              document.getElementById("weight_stat").value= child.val();
+
+            }else{
+              document.getElementById("weight").value= child.val();
+            }
+         });
+        });
+	   var userRef = firebase.database().ref().child("Body_weight");
+       userRef.on("value", function(snapshot) {
+       snapshot.forEach(function(child) {
+	   x_axis_bar.push(Number(child.key));
+	   y_axis_bar.push(parseInt(child.val().Body_weight, 10));
+       });
+	   var trace1 = {
+                    x: x_axis_bar,
+                    y: y_axis_bar,
+                    type: 'bar',
+					name: 'Weight'
+                  };
+		var data = [trace1];
+		var layout = {
+                 
+				  
+				  yaxis: {
+                         title: 'body weight'
+                      },
+				  xaxis: {
+                         title: 'Time'
+                      }
+  
+
+               };
+	  Plotly.newPlot('tester_1', data,layout);
+      });
+		
+		
+		
+
+     }
+
+</script> -->
+<body onload="sample();">
+
+<!-- <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">Portfolio</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav> -->
+
+<div style="height: 90px;">
+  <div class="container text-center">
+    <h1 style="color: #FFFFB3; font-weight:400;"><b>INF 551 - Project Demo</b></h1>
+    <h2 style="color: #FFFFB3; font-weight:400;"><b>IoT Theme: </b> Smart Health – Personal Fitness</h2>
+    <span> <h3 style="font-weight:400; color: #FFFFB3;">Sandeep Gundla  &  Oluwaseun Deleawe</h3> 
+    <!-- <h3 style="font-weight:400;">Oluwaseun Deleawe</h3>  -->
+    <h3 style="font-weight:400; color: #FFFFB3;">April 22, 2019</h3> </span> 
+    <br><br><br><br>
+    <div class="container download" id="downloads">
+      <!-- <h2>Downloads</h2> -->
+      <!-- <p class="lead">Some Text.....</p> -->
+      <div class="column">
+          <div class="col-sm-6">
+          <a href="control_panel.html" target="_blank">
+              <img alt="AltText" src="images/control_panel_screenshot.png" class="img-responsive">
+          </a>
+          </div>
+  
+          <div class="col-sm-6">
+          <a href="fitbit_ui.html" target="_blank">
+              <img  alt="AltText" src="images/fitbit_ui_screenshot.png" class="img-responsive">
+          </a>
+          </div>
+          <div></div>
+          <div class="col-sm-6">
+          <a href="smart_scale_ui.html" target="_blank">
+              <img src="images/smart_scale_screenshot.png" alt="AltText" class="img-responsive">
+          </a>
+          </div>
+  
+          <div class="col-sm-6">
+          <a href="smart_plate_ui.html" target="_blank">
+              <img alt="AltText" src="images/smart_plate_ui_screenshot.png" class="img-responsive">
+          </a>
+          </div>
+      </div>
+   </div>
+    <!-- <a href="control_panel.html">Control Panel</a> -->
+
+  </div>
+</div>
+
+\
+
+<!-- <div class="container-fluid bg-4 text-center">    
+  <div class="row">
+    <div class="col-sm-4">
+      <img src="https://images-na.ssl-images-amazon.com/images/I/81cp0NTn-EL._SX522_.jpg" style="width:250px" alt="Image">
+      <h3><strong><u>FitBit</u></strong></h3> <br>
+      <div style="text-align: center;">
+	    
+        Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text"  id="stat" name="Status"  readonly="readonly"><br><br>
+        Steps Taken &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id ="steps" name="StepsTaken"  readonly="readonly"><br><br>
+        Heart Rate(BPM) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" id = "heart" name="HeartRate"  readonly="readonly"><br><br>
+        Hours of Sleep &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id ="sleep" name="HoursOfSleep"  readonly="readonly"><br><br>
+        Body Temperature (F) <input type="text" id = "temp" name="BodyTemp"  readonly="readonly"><br><br>
+     </div>
+    </div>
+    <div class="col-sm-4"> 
+        <img src="https://marketing.fitbit.com/images/product-listing/desktop/aria2-black-0-5bccb74f9e88d493dfc6141ec59f64fb.png" class="img-responsive" style="width:370px" alt="Image">
+      <div style="margin-left: -50px;">
+        <h3><strong><u>Smart Scale</u></strong></h3> <br>
+        Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="label" id="weight_stat" name="Status"  readonly="readonly"><br><br>
+        Body Weight (lbs) <input type="text" id="weight" name="BodyWeight"  readonly="readonly"><br><br>
+      </div>
+    </div>
+    <div class="col-sm-4"> 
+      <img src="http://i68.tinypic.com/2n15l0.gif" class="img-responsive" style="width:370px" alt="Image">
+      <div style="margin-left: -60px;">
+        <h3><strong><u>Smart Plate</u></strong></h3> <br>
+        Status   <input type="text" class="ml-1" id ="plate_stat" name="Status" value="On" readonly="readonly"><br><br>
+        Calories <input type="text" id ="cal" name="Calories" value="300" readonly="readonly"><br><br>
+        Protein (g) <input type="text" id="protein" name="Protein" value="57" readonly="readonly"><br><br>
+        Carbs (g) <input type="text" id="carbs" name="Carbs" value="7.5" readonly="readonly"><br><br>
+        Fat (g) <input type="text" id="fat" name="Fat" value="100" readonly="readonly"><br><br>
+     </div>
+  </div>
+
+</div><br>
+ <div class="row">
+   <div class="col-sm-5">
+     <div id="tester" style="width:500px;height:350px;"></div>
+   </div>
+   <div class="col-sm-3">
+     <div id="tester_1" style="width:400px;height:350px;"></div>
+   </div>
+   <div class="col-sm-4">
+     <div id="tester_2" style="width:450px;height:350px;"></div>
+   </div>
+ </div>
+ 
+</div> -->
+<!-- <div class="container-fluid bg-3 text-center">    
+  <div class="row">
+    <div class="col-sm-3">
+      <p>Some text..</p>
+      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-3"> 
+      <p>Some text..</p>
+      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-3"> 
+      <p>Some text..</p>
+      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+    </div>
+    <div class="col-sm-3">
+      <p>Some text..</p>
+      <img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+    </div>
+  </div>
+</div><br><br>
+
+<footer class="container-fluid text-center">
+  <p>Footer Text</p>
+</footer> -->
+
+</body>
+</html>
