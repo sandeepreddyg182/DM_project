@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <style>
     /* Remove the navbar's default margin-bottom and rounded borders */ 
     .navbar {
@@ -38,10 +39,22 @@
 <script>
      function sample()
      {
-        var dbref = firebase.database().ref().child("FitBit/1");
-       dbref.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Status"){
+	 
+      var x_axis = [];
+	   var y_axis = [];
+	   var y_axis_heart = [];
+	   var y_axis_steps = [];
+       var x_axis_bar = [];
+	   var y_axis_bar = [];
+	   var x_axis_plate = [];
+	   var y_axis_car = [];
+	   var y_axis_prot = [];
+	   var y_axis_fat = [];
+	    var dbref = firebase.database().ref().child("FitBit");
+		
+        dbref.orderByKey().limitToLast(1).on('child_added', function(snapshot) {
+        snapshot.forEach(function(child) {
+        if(child.key == "Status"){
               document.getElementById("stat").value= child.val();
 
             }else if(child.key == "Heart_rate"){
@@ -53,42 +66,165 @@
               document.getElementById("steps").value= child.val();
             }else{
               document.getElementById("temp").value= child.val();
+			  
             }
-
-          });
+         });
+        });
+       var userRef = firebase.database().ref().child("FitBit");
+       userRef.on("value", function(snapshot) {
+       snapshot.forEach(function(child) {
+	   x_axis.push(Number(child.key));
+	   y_axis.push(parseInt(child.val().Temperature, 10));
+	   y_axis_heart.push(parseInt(child.val().Heart_rate, 10));
+	   y_axis_steps.push(parseInt(child.val().Steps_taken, 10));
        });
-       var dbref_2 = firebase.database().ref().child("Smart_plate/1");
-       dbref_2.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Calories_taken"){
-              document.getElementById("cal").value= child.val();
+	   var trace1 = {
+                    x: x_axis,
+                    y: y_axis,
+                    type: 'scatter',
+					mode: 'lines',
+					name: 'Temp'
+                  };
+	    var trace2 = {
+                    x: x_axis,
+                    y: y_axis_heart,
+                    type: 'scatter',
+					mode: 'lines',
+					name: 'HRate'
+                  };
+		var trace3 = {
+                    x: x_axis,
+                    y: y_axis_steps,
+                    type: 'scatter',
+					mode: 'lines',
+					name: 'Steps'
+                  };
+	    var layout = {
+                 
+				  
+				 
+				  xaxis: {
+                         title: 'Time'
+                      }
+  
 
-            }else if(child.key == "Carbs"){
-              document.getElementById("carbs").value= child.val();
-            } else if(child.key == "Fats") {
-              document.getElementById("fat").value= child.val();
-            }
-            else if(child.key == "Proteins"){
-              document.getElementById("protein").value= child.val();
-            }else{
+               };
+	   var data = [trace1,trace2,trace3];
+	  Plotly.newPlot('tester', data,layout);
+      });
+	  
+	  
+      
+	  
+      
+
+
+       var dbref = firebase.database().ref().child("Smart_plate");
+       dbref.orderByKey().limitToLast(1).on('child_added', function(snapshot) {
+        snapshot.forEach(function(child) {
+        if(child.key == "Status"){
               document.getElementById("plate_stat").value= child.val();
-            }
 
-          });
+            }else if(child.key == "Proteins"){
+              document.getElementById("protein").value= child.val();
+            } else if(child.key == "Carbs") {
+              document.getElementById("carbs").value= child.val();
+            }
+            else if(child.key == "Fats"){
+              document.getElementById("fat").value= child.val();
+            }else{
+              document.getElementById("cal").value= child.val();
+			  
+            }
+         });
+        });
+      var userRef = firebase.database().ref().child("Smart_plate");
+       userRef.on("value", function(snapshot) {
+       snapshot.forEach(function(child) {
+	   x_axis_plate.push(Number(child.key));
+	   y_axis_car.push(parseInt(child.val().Carbs, 10));
+	   y_axis_prot.push(parseInt(child.val().Proteins, 10));
+	   y_axis_fat.push(parseInt(child.val().Fats, 10));
        });
-       var dbref_3 = firebase.database().ref().child("Body_weight/1");
-       dbref_3.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Body_weight"){
-              document.getElementById("weight").value= child.val();
+	   var trace1 = {
+                    x: x_axis_plate,
+                    y: y_axis_car,
+                    type: 'bar',
+					name: 'Carbs'
+                  };
+	    var trace2 = {
+                    x: x_axis_plate,
+                    y: y_axis_prot,
+                    type: 'bar',
+					name: 'Proteins'
+                  };
+		var trace3 = {
+                    x: x_axis_plate,
+                    y: y_axis_fat,
+                    type: 'bar',
+					name: 'Fats'
+                  };
+	   var layout = {
+                 
+				  
+				 
+				  xaxis: {
+                         title: 'Time'
+                      }
+  
 
-            }
-            else{
+               };
+	   var data = [trace1,trace2,trace3];
+	  Plotly.newPlot('tester_2', data,layout);
+      });
+	  
+	  
+	   
+	   
+	   
+	   
+       var dbref_bw = firebase.database().ref().child("Body_weight");
+        dbref_bw.orderByKey().limitToLast(1).on('child_added', function(snapshot) {
+        snapshot.forEach(function(child) {
+        if(child.key == "Status"){
               document.getElementById("weight_stat").value= child.val();
-            }
 
-          });
+            }else{
+              document.getElementById("weight").value= child.val();
+            }
+         });
+        });
+	   var userRef = firebase.database().ref().child("Body_weight");
+       userRef.on("value", function(snapshot) {
+       snapshot.forEach(function(child) {
+	   x_axis_bar.push(Number(child.key));
+	   y_axis_bar.push(parseInt(child.val().Body_weight, 10));
        });
+	   var trace1 = {
+                    x: x_axis_bar,
+                    y: y_axis_bar,
+                    type: 'bar',
+					name: 'Weight'
+                  };
+		var data = [trace1];
+		var layout = {
+                 
+				  
+				  yaxis: {
+                         title: 'body weight'
+                      },
+				  xaxis: {
+                         title: 'Time'
+                      }
+  
+
+               };
+	  Plotly.newPlot('tester_1', data,layout);
+      });
+		
+		
+		
+
      }
 
 </script>
@@ -128,36 +264,50 @@
   <div class="row">
     <div class="col-sm-4">
       <img src="https://images-na.ssl-images-amazon.com/images/I/81cp0NTn-EL._SX522_.jpg" style="width:250px" alt="Image">
-      <h3>FitBit</h3> <br>
+      <h3><strong><u>FitBit</u></strong></h3> <br>
       <div style="text-align: center;">
-        Status <input type="text" id="stat" name="Status" value="On"><br><br>
-        Steps Taken <input type="text" id ="steps" name="StepsTaken" value="300"><br><br>
-        Heart Rate (BPM) <input type="text" id = "heart" name="HeartRate" value="57"><br><br>
-        Hours of Sleep <input type="text" id ="sleep" name="HoursOfSleep" value="7.5"><br><br>
-        Body Temperature (F) <input type="text" id = "temp" name="BodyTemp" value="100"><br><br>
+	    
+        Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text"  id="stat" name="Status"  readonly="readonly"><br><br>
+        Steps Taken &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id ="steps" name="StepsTaken"  readonly="readonly"><br><br>
+        Heart Rate(BPM) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <input type="text" id = "heart" name="HeartRate"  readonly="readonly"><br><br>
+        Hours of Sleep &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id ="sleep" name="HoursOfSleep"  readonly="readonly"><br><br>
+        Body Temperature (F) <input type="text" id = "temp" name="BodyTemp"  readonly="readonly"><br><br>
      </div>
     </div>
     <div class="col-sm-4"> 
         <img src="https://marketing.fitbit.com/images/product-listing/desktop/aria2-black-0-5bccb74f9e88d493dfc6141ec59f64fb.png" class="img-responsive" style="width:370px" alt="Image">
       <div style="margin-left: -50px;">
-        <h3>Smart Scale</h3> <br>
-        Status <input type="text" id="weight_stat" name="Status" value="On"><br><br>
-        Body Weight (lbs) <input type="text" id="weight" name="BodyWeight" value="200"><br><br>
+        <h3><strong><u>Smart Scale</u></strong></h3> <br>
+        Status &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="label" id="weight_stat" name="Status"  readonly="readonly"><br><br>
+        Body Weight (lbs) <input type="text" id="weight" name="BodyWeight"  readonly="readonly"><br><br>
       </div>
     </div>
     <div class="col-sm-4"> 
       <img src="http://i68.tinypic.com/2n15l0.gif" class="img-responsive" style="width:370px" alt="Image">
       <div style="margin-left: -60px;">
-        <h3>Smart Plate</h3> <br>
-        Status <input type="text" id ="plate_stat" name="Status" value="On"><br><br>
-        Calories <input type="text" id ="cal" name="Calories" value="300"><br><br>
-        Protein (g) <input type="text" id="protein" name="Protein" value="57"><br><br>
-        Carbs (g) <input type="text" id="carbs" name="Carbs" value="7.5"><br><br>
-        Fat (g) <input type="text" id="fat" name="Fat" value="100"><br><br>
+        <h3><strong><u>Smart Plate</u></strong></h3> <br>
+        Status   <input type="text" class="ml-1" id ="plate_stat" name="Status" value="On" readonly="readonly"><br><br>
+        Calories <input type="text" id ="cal" name="Calories" value="300" readonly="readonly"><br><br>
+        Protein (g) <input type="text" id="protein" name="Protein" value="57" readonly="readonly"><br><br>
+        Carbs (g) <input type="text" id="carbs" name="Carbs" value="7.5" readonly="readonly"><br><br>
+        Fat (g) <input type="text" id="fat" name="Fat" value="100" readonly="readonly"><br><br>
      </div>
   </div>
-</div><br>
 
+</div><br>
+ <div class="row">
+   <div class="col-sm-5">
+     <div id="tester" style="width:500px;height:350px;"></div>
+   </div>
+   <div class="col-sm-3">
+     <div id="tester_1" style="width:400px;height:350px;"></div>
+   </div>
+   <div class="col-sm-4">
+     <div id="tester_2" style="width:450px;height:350px;"></div>
+   </div>
+ </div>
+ 
+</div>
 <!-- <div class="container-fluid bg-3 text-center">    
   <div class="row">
     <div class="col-sm-3">

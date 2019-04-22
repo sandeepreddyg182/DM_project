@@ -43,63 +43,20 @@
 
 </script>
 <script>
-     function sample()
-     {
-        var dbref = firebase.database().ref().child("FitBit/1");
-       dbref.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Status"){
-              document.getElementById("stat").value= child.val();
-
-            }else if(child.key == "Heart_rate"){
-              document.getElementById("heart").value= child.val();
-            } else if(child.key == "Sleep_hours") {
-              document.getElementById("sleep").value= child.val();
-            }
-            else if(child.key == "Steps_taken"){
-              document.getElementById("steps").value= child.val();
-            }else{
-              document.getElementById("temp").value= child.val();
-            }
-
-          });
+	  var i = 1;
+	 function writeUserData() {
+       firebase.database().ref("Smart_plate/"+i).set({
+           Status: document.getElementById("plate_stat").value,
+		   Proteins: document.getElementById("protein").value,
+		   Carbs: document.getElementById("carbs").value,
+		   Fats: document.getElementById("fat").value,
+		   Calories_taken: document.getElementById("cal").value
        });
-       var dbref_2 = firebase.database().ref().child("Smart_plate/1");
-       dbref_2.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Calories_taken"){
-              document.getElementById("cal").value= child.val();
-
-            }else if(child.key == "Carbs"){
-              document.getElementById("carbs").value= child.val();
-            } else if(child.key == "Fats") {
-              document.getElementById("fat").value= child.val();
-            }
-            else if(child.key == "Proteins"){
-              document.getElementById("protein").value= child.val();
-            }else{
-              document.getElementById("plate_stat").value= child.val();
-            }
-
-          });
-       });
-       var dbref_3 = firebase.database().ref().child("Body_weight/1");
-       dbref_3.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Body_weight"){
-              document.getElementById("weight").value= child.val();
-
-            }
-            else{
-              document.getElementById("weight_stat").value= child.val();
-            }
-
-          });
-       });
+ 
+       i = i+ 1;
      }
-
 </script>
-<body onload="sample();">
+<body>
 
 <!-- <nav class="navbar navbar-inverse">
   <div class="container-fluid">
@@ -140,10 +97,11 @@
     <!-- <h3>FitBit</h3> <br> --> <br><br><br>
     <div style="text-align: center; word-wrap: break-word;">
       <b>Status</b> <input type="text" id ="plate_stat" name="Status" value="On" size="10">
-      <b>Calories</b> <input type="text" id ="cal" name="Calories" value="300" size="10">
-      <b>Protein (g)</b> <input type="text" id="protein" name="Protein" value="57" size="10">
-      <b>Carbs (g)</b> <input type="text" id="carbs" name="Carbs" value="7.5" size="10">
-      <b>Fat (g)</b> <input type="text" id="fat" name="Fat" value="100" size="10">
+      <b>Calories</b> <input type="text" id ="cal" name="Calories" value="3000" size="10">
+      <b>Protein (g)</b> <input type="text" id="protein" name="Protein" value="570" size="10">
+      <b>Carbs (g)</b> <input type="text" id="carbs" name="Carbs" value="2400" size="10">
+      <b>Fat (g)</b> <input type="text" id="fat" name="Fat" value="150" size="10">
+	  <input class="btn btn-primary" type="submit" value="Submit" onclick="writeUserData()">
     </div>
   </div>
     <!-- <div class="col-sm-4"> 

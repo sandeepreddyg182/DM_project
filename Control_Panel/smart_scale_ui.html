@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Smart Scale Device UI</title>
+  <title>Body Weight Scale Device UI</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -43,60 +43,16 @@
 
 </script>
 <script>
-     function sample()
-     {
-        var dbref = firebase.database().ref().child("FitBit/1");
-       dbref.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Status"){
-              document.getElementById("stat").value= child.val();
-
-            }else if(child.key == "Heart_rate"){
-              document.getElementById("heart").value= child.val();
-            } else if(child.key == "Sleep_hours") {
-              document.getElementById("sleep").value= child.val();
-            }
-            else if(child.key == "Steps_taken"){
-              document.getElementById("steps").value= child.val();
-            }else{
-              document.getElementById("temp").value= child.val();
-            }
-
-          });
+      var i = 1;
+	 function writeUserData() {
+       firebase.database().ref("Body_weight/"+i).set({
+           Status: document.getElementById("weight_stat").value,
+		   Body_weight: document.getElementById("weight").value
+		   
        });
-       var dbref_2 = firebase.database().ref().child("Smart_plate/1");
-       dbref_2.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Calories_taken"){
-              document.getElementById("cal").value= child.val();
-
-            }else if(child.key == "Carbs"){
-              document.getElementById("carbs").value= child.val();
-            } else if(child.key == "Fats") {
-              document.getElementById("fat").value= child.val();
-            }
-            else if(child.key == "Proteins"){
-              document.getElementById("protein").value= child.val();
-            }else{
-              document.getElementById("plate_stat").value= child.val();
-            }
-
-          });
-       });
-       var dbref_3 = firebase.database().ref().child("Body_weight/1");
-       dbref_3.on('value', function(snapshot) {
-          snapshot.forEach(function(child) {
-            if(child.key == "Body_weight"){
-              document.getElementById("weight").value= child.val();
-
-            }
-            else{
-              document.getElementById("weight_stat").value= child.val();
-            }
-
-          });
-       });
+       i = i+ 1;
      }
+     
 
 </script>
 <body onload="sample();">
@@ -128,7 +84,7 @@
 
 <div style="height: 90px; background-color: #6BBF59;">
   <div class="container text-center">
-    <h1 style="color: white;">Smart Scale Device UI</h1>
+    <h1 style="color: white;">Body Weight Scale Device UI</h1>
   </div>
 </div>
 <br>
@@ -140,8 +96,8 @@
     <!-- <h3>FitBit</h3> <br> --> <br><br>
     <div style="text-align: center; word-wrap: break-word;">
         <b>Status</b> <input type="text" id="weight_stat" name="Status" value="On" size="10">
-        <b>Body Weight (lbs)</b> <input type="text" id="weight" name="BodyWeight" value="200" size="10">
-
+        <b>Body Weight (lbs)</b> <input type="text" id="weight" name="BodyWeight" value="200" size="10" readonly>
+        <input class="btn btn-primary" type="submit" value="Submit" onclick="writeUserData()">
       <!-- <b>Status</b> <input type="text" id ="plate_stat" name="Status" value="On" size="10">
       <b>Calories</b> <input type="text" id ="cal" name="Calories" value="300" size="10">
       <b>Protein (G)</b> <input type="text" id="protein" name="Protein" value="57" size="10">
